@@ -13,11 +13,11 @@ def format_results(A, b, epsilon, solver, solution, success, message):
     
     if success and solution is not None:
         result.extend([f"Статус: {message} \n Количество итераций: {solver.iterations} \n\nВектор неизвестных:"])
-        result.extend([f"  x{i+1} = {x:.10f}" for i, x in enumerate(solution)])
+        result.extend([f"  x{i+1} = {x:.20f}" for i, x in enumerate(solution)])
         
         if solver.errors:
             result.append("Вектор погрешностей:")
-            result.extend([f"  |x{i+1}^(k) - x{i+1}^(k-1)| = {err:.10e}" for i, err in enumerate(solver.errors[-1])])
+            result.extend([f"  |x{i+1}^(k) - x{i+1}^(k-1)| = {err:.20e}" for i, err in enumerate(solver.errors[-1])])
     else:
         result.append(f"Ошибка: {message}")
     

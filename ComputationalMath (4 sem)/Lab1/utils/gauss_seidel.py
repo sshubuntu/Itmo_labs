@@ -77,8 +77,7 @@ class GaussSeidelSolver:
             if success:
                 self.A = A_new
                 self.b = b_new
-                has_dominance = True
-       
+
         
         n = self.n
         C = np.zeros_like(self.A)
@@ -92,8 +91,7 @@ class GaussSeidelSolver:
                     C[i, j] = -self.A[i, j] / self.A[i, i]
         
         x = np.zeros(n)
-        x_prev = np.zeros(n)
-        
+
         self.iterations = 0
         self.errors = []
         
