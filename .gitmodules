@@ -7,3 +7,15 @@
 [submodule "Web (3 sem)/WEB_Lab3"]
 	path = Web (3 sem)/WEB_Lab3
 	url = https://github.com/sshubuntu/WEB_Lab3
+[submodule "3 sem Web/WEB_Lab1"]
+	path = 3 sem Web/WEB_Lab1
+	url = https://github.com/sshubuntu/WEB_Lab1
+[submodule "3 sem Web/WEB_Lab2"]
+	path = 3 sem Web/WEB_Lab2
+	url = https://github.com/sshubuntu/WEB_Lab2
+[submodule "3 sem Web/WEB_Lab3"]
+	path = 3 sem Web/WEB_Lab3
+	url = https://github.com/sshubuntu/WEB_Lab3
+[submodule "3 sem Web/WEB_Lab4"]
+	path = 3 sem Web/WEB_Lab4
+	url = https://github.com/sshubuntu/WEB_Lab4
