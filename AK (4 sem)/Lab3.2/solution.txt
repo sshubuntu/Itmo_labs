@@ -1,0 +1,14 @@
+
+.text
+start:
+    @p 0x80          \ read input
+    swap_endian      \ call procedure
+    !p 0x84          \ write result
+    halt
+
+
+swap_endian:
+
+    
+
+    ;
