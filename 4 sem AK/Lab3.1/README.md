@@ -1,1 +1,1 @@
- [Ссылка на отчет](https://wrench.edu.swampbuds.me/report/632fbf7a-b6c8-4d67-80b2-7d5a1bee992f) с успешными тестами.
+ [Ссылка на отчет](https://wrench.edu.swampbuds.me/report/5cd2066b-cde7-443d-9639-bdf8e081bfee) с успешными тестами.
