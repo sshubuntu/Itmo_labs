@@ -19,3 +19,6 @@
 [submodule "3 sem Web/WEB_Lab4"]
 	path = 3 sem Web/WEB_Lab4
 	url = https://github.com/sshubuntu/WEB_Lab4
+[submodule "4 sem OPI/OPI_lab2"]
+	path = 4 sem OPI/OPI_lab2
+	url = https://github.com/sshubuntu/OPI_lab2
