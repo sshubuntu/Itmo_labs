@@ -1,6 +1,3 @@
-"""
-Модуль графического интерфейса
-"""
 import tkinter as tk
 from tkinter import ttk, messagebox
 import matplotlib.pyplot as plt
@@ -11,9 +8,7 @@ from .solvers import ODESolver
 from .equations import DifferentialEquations
 
 
-class ODESolverGUI:
-    """GUI для решения ОДУ"""
-    
+class ODESolverGUI:    
     def __init__(self, root):
         self.root = root
         self.root.title("Решение ОДУ - Вариант 18")
@@ -24,12 +19,9 @@ class ODESolverGUI:
         self.setup_ui()
     
     def setup_ui(self):
-        """Настройка интерфейса"""
-        # Левая панель - ввод данных
         left_frame = ttk.Frame(self.root, padding="10")
         left_frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
         
-        # Выбор уравнения
         ttk.Label(left_frame, text="Выберите уравнение:").grid(row=0, column=0, sticky=tk.W, pady=5)
         self.equation_var = tk.StringVar()
         self.equation_combo = ttk.Combobox(left_frame, textvariable=self.equation_var, 
@@ -38,7 +30,6 @@ class ODESolverGUI:
         self.equation_combo.grid(row=0, column=1, pady=5)
         self.equation_combo.current(0)
         
-        # Начальные условия
         ttk.Label(left_frame, text="x₀:").grid(row=1, column=0, sticky=tk.W, pady=5)
         self.x0_entry = ttk.Entry(left_frame, width=32)
         self.x0_entry.grid(row=1, column=1, pady=5)
@@ -49,25 +40,21 @@ class ODESolverGUI:
         self.y0_entry.grid(row=2, column=1, pady=5)
         self.y0_entry.insert(0, "1")
         
-        # Интервал
         ttk.Label(left_frame, text="xₙ:").grid(row=3, column=0, sticky=tk.W, pady=5)
         self.xn_entry = ttk.Entry(left_frame, width=32)
         self.xn_entry.grid(row=3, column=1, pady=5)
         self.xn_entry.insert(0, "1")
         
-        # Шаг
         ttk.Label(left_frame, text="Шаг h:").grid(row=4, column=0, sticky=tk.W, pady=5)
         self.h_entry = ttk.Entry(left_frame, width=32)
         self.h_entry.grid(row=4, column=1, pady=5)
         self.h_entry.insert(0, "0.1")
         
-        # Точность
         ttk.Label(left_frame, text="Точность ε:").grid(row=5, column=0, sticky=tk.W, pady=5)
         self.epsilon_entry = ttk.Entry(left_frame, width=32)
         self.epsilon_entry.grid(row=5, column=1, pady=5)
         self.epsilon_entry.insert(0, "0.001")
         
-        # Выбор методов
         ttk.Label(left_frame, text="Методы решения:").grid(row=6, column=0, columnspan=2, sticky=tk.W, pady=10)
         
         self.euler_var = tk.BooleanVar(value=True)
@@ -79,26 +66,20 @@ class ODESolverGUI:
         self.milne_var = tk.BooleanVar(value=True)
         ttk.Checkbutton(left_frame, text="Метод Милна", variable=self.milne_var).grid(row=9, column=0, columnspan=2, sticky=tk.W)
         
-        # Кнопка решения
         ttk.Button(left_frame, text="Решить", command=self.solve).grid(row=10, column=0, columnspan=2, pady=20)
         
-        # Правая панель - результаты
         right_frame = ttk.Frame(self.root, padding="10")
         right_frame.grid(row=0, column=1, sticky=(tk.W, tk.E, tk.N, tk.S))
         
-        # Таблица результатов
         ttk.Label(right_frame, text="Результаты:").pack(pady=5)
         
-        # Создаем Treeview для таблицы
         self.tree = ttk.Treeview(right_frame, height=15)
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         
-        # Scrollbar для таблицы
         scrollbar = ttk.Scrollbar(right_frame, orient=tk.VERTICAL, command=self.tree.yview)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         self.tree.configure(yscrollcommand=scrollbar.set)
         
-        # Нижняя панель - график
         bottom_frame = ttk.Frame(self.root, padding="10")
         bottom_frame.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E, tk.N, tk.S))
         
@@ -106,12 +87,10 @@ class ODESolverGUI:
         self.canvas = FigureCanvasTkAgg(self.figure, bottom_frame)
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
         
-        # Настройка весов для растягивания
         self.root.columnconfigure(1, weight=1)
         self.root.rowconfigure(1, weight=1)
     
     def validate_inputs(self):
-        """Валидация всех полей ввода"""
         try:
             x0 = float(self.x0_entry.get())
             y0 = float(self.y0_entry.get())
@@ -150,61 +129,83 @@ class ODESolverGUI:
             return None
     
     def solve(self):
-        """Решение ОДУ выбранными методами"""
         params = self.validate_inputs()
         if params is None:
             return
         
         x0, y0, xn, h, epsilon = params
         
-        # Получаем функцию
         eq_name = self.equation_var.get()
         f = self.equations[eq_name]["func"]
         exact_func = self.equations[eq_name]["exact"]
         
-        # Очищаем таблицу
         for item in self.tree.get_children():
             self.tree.delete(item)
         
-        # Очищаем график
         self.ax.clear()
         
         results = {}
+        overflow_warning = False
         
-        # Решаем выбранными методами
         if self.euler_var.get():
             x_euler, y_euler = self.solver.euler_method(f, x0, y0, xn, h)
             results["Эйлер"] = (x_euler, y_euler)
-            runge_error = self.solver.runge_rule(f, x0, y0, xn, h, "euler", 1)
-            results["Эйлер_error"] = runge_error
+            try:
+                runge_error = self.solver.runge_rule(f, x0, y0, xn, h, "euler", 1)
+                results["Эйлер_error"] = runge_error
+            except Exception:
+                results["Эйлер_error"] = float('inf')
+            # Check for early termination due to overflow
+            if len(x_euler) < int((xn - x0) / h) + 1:
+                overflow_warning = True
         
         if self.rk4_var.get():
             x_rk4, y_rk4 = self.solver.runge_kutta_4(f, x0, y0, xn, h)
             results["Рунге-Кутта"] = (x_rk4, y_rk4)
-            runge_error = self.solver.runge_rule(f, x0, y0, xn, h, "rk4", 4)
-            results["РК_error"] = runge_error
+            try:
+                runge_error = self.solver.runge_rule(f, x0, y0, xn, h, "rk4", 4)
+                results["РК_error"] = runge_error
+            except Exception:
+                results["РК_error"] = float('inf')
+
+            if len(x_rk4) < int((xn - x0) / h) + 1:
+                overflow_warning = True
         
         if self.milne_var.get():
             try:
                 x_milne, y_milne = self.solver.milne_method(f, x0, y0, xn, h, epsilon)
                 results["Милн"] = (x_milne, y_milne)
+                if len(x_milne) < int((xn - x0) / h) + 1:
+                    overflow_warning = True
             except Exception as e:
                 messagebox.showwarning("Предупреждение", f"Метод Милна: {str(e)}")
         
-        # Точное решение (если есть)
         if exact_func is not None:
-            x_exact = np.linspace(x0, xn, 100)
-            y_exact = [exact_func(x, x0, y0) for x in x_exact]
-            results["Точное"] = (x_exact, y_exact)
+            max_x = x0
+            for method in ["Эйлер", "Рунге-Кутта", "Милн"]:
+                if method in results:
+                    x_vals, _ = results[method]
+                    if x_vals:
+                        max_x = max(max_x, x_vals[-1])
+            
+            x_exact = np.linspace(x0, max_x, 100)
+            try:
+                y_exact = [exact_func(x, x0, y0) for x in x_exact]
+                results["Точное"] = (x_exact, y_exact)
+            except Exception:
+                pass
         
-        # Заполняем таблицу
         self.fill_table(results)
         
-        # Строим график
         self.plot_results(results)
+        
+        if overflow_warning:
+            messagebox.showwarning("Предупреждение", 
+                "Обнаружено переполнение при вычислениях!\n"
+                "Решение может быть неполным из-за быстрого роста функции.\n"
+                "Попробуйте уменьшить интервал [x₀, xₙ] или изменить начальные условия.")
     
     def fill_table(self, results):
-        """Заполнение таблицы результатов"""
         columns = ["i", "x"]
         for method in ["Эйлер", "Рунге-Кутта", "Милн", "Точное"]:
             if method in results:
@@ -250,7 +251,6 @@ class ODESolverGUI:
             
             self.tree.insert("", tk.END, values=row)
         
-        # Добавляем строку с погрешностями
         error_row = ["", "Погрешность"]
         for method in ["Эйлер", "Рунге-Кутта", "Милн", "Точное"]:
             if method in results:
@@ -273,7 +273,6 @@ class ODESolverGUI:
         self.tree.insert("", tk.END, values=error_row)
     
     def plot_results(self, results):
-        """Построение графиков"""
         self.ax.clear()
         
         colors = {"Эйлер": "blue", "Рунге-Кутта": "green", "Милн": "red", "Точное": "black"}
@@ -282,11 +281,7 @@ class ODESolverGUI:
         for method in ["Эйлер", "Рунге-Кутта", "Милн", "Точное"]:
             if method in results:
                 x_vals, y_vals = results[method]
-                self.ax.plot(x_vals, y_vals, 
-                           label=method, 
-                           color=colors[method], 
-                           linestyle=styles[method],
-                           linewidth=2 if method == "Точное" else 1.5)
+                self.ax.plot(x_vals, y_vals, label=method, color=colors[method], linestyle=styles[method], linewidth=2 if method == "Точное" else 1.5)
         
         self.ax.set_xlabel("x")
         self.ax.set_ylabel("y")

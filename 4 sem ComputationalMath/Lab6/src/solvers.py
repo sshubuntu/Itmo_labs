@@ -1,63 +1,43 @@
-"""
-Модуль с численными методами решения ОДУ
-"""
-
+import math
+import sys
 
 class ODESolver:
-    """Класс для решения ОДУ численными методами"""
+    @staticmethod
+    def _is_overflow_safe(value):
+        """Check if a value is within safe numeric bounds."""
+        if value is None:
+            return False
+        if isinstance(value, (int, float)):
+            if math.isinf(value) or math.isnan(value):
+                return False
+            if abs(value) > 1e300:
+                return False
+        return True
     
     @staticmethod
     def euler_method(f, x0, y0, xn, h):
-        """
-        Метод Эйлера для решения ОДУ
-        
-        Формула: y_{i+1} = y_i + h * f(x_i, y_i)
-        Порядок точности: O(h)
-        
-        Args:
-            f: функция правой части ОДУ y' = f(x, y)
-            x0: начальное значение x
-            y0: начальное значение y
-            xn: конечное значение x
-            h: шаг интегрирования
-            
-        Returns:
-            tuple: (список x, список y)
-        """
         n = int((xn - x0) / h)
         x_values = [x0 + i * h for i in range(n + 1)]
         y_values = [y0]
         
         for i in range(n):
-            y_next = y_values[i] + h * f(x_values[i], y_values[i])
-            y_values.append(y_next)
+            try:
+                f_val = f(x_values[i], y_values[i])
+                if not ODESolver._is_overflow_safe(f_val):
+                    break
+                y_next = y_values[i] + h * f_val
+                if not ODESolver._is_overflow_safe(y_next):
+                    break
+                y_values.append(y_next)
+            except (OverflowError, FloatingPointError):
+                break
+        
+        x_values = x_values[:len(y_values)]
         
         return x_values, y_values
     
     @staticmethod
     def runge_kutta_4(f, x0, y0, xn, h):
-        """
-        Метод Рунге-Кутта 4-го порядка
-        
-        Формулы:
-            k1 = h * f(x_i, y_i)
-            k2 = h * f(x_i + h/2, y_i + k1/2)
-            k3 = h * f(x_i + h/2, y_i + k2/2)
-            k4 = h * f(x_i + h, y_i + k3)
-            y_{i+1} = y_i + (k1 + 2*k2 + 2*k3 + k4) / 6
-        
-        Порядок точности: O(h^4)
-        
-        Args:
-            f: функция правой части ОДУ y' = f(x, y)
-            x0: начальное значение x
-            y0: начальное значение y
-            xn: конечное значение x
-            h: шаг интегрирования
-            
-        Returns:
-            tuple: (список x, список y)
-        """
         n = int((xn - x0) / h)
         x_values = [x0 + i * h for i in range(n + 1)]
         y_values = [y0]
@@ -66,39 +46,38 @@ class ODESolver:
             x_i = x_values[i]
             y_i = y_values[i]
             
-            k1 = h * f(x_i, y_i)
-            k2 = h * f(x_i + h/2, y_i + k1/2)
-            k3 = h * f(x_i + h/2, y_i + k2/2)
-            k4 = h * f(x_i + h, y_i + k3)
-            
-            y_next = y_i + (k1 + 2*k2 + 2*k3 + k4) / 6
-            y_values.append(y_next)
+            try:
+                k1 = h * f(x_i, y_i)
+                if not ODESolver._is_overflow_safe(k1):
+                    break
+                k2 = h * f(x_i + h/2, y_i + k1/2)
+                if not ODESolver._is_overflow_safe(k2):
+                    break
+                k3 = h * f(x_i + h/2, y_i + k2/2)
+                if not ODESolver._is_overflow_safe(k3):
+                    break
+                k4 = h * f(x_i + h, y_i + k3)
+                if not ODESolver._is_overflow_safe(k4):
+                    break
+                
+                y_next = y_i + (k1 + 2*k2 + 2*k3 + k4) / 6
+                if not ODESolver._is_overflow_safe(y_next):
+                    break
+                y_values.append(y_next)
+            except (OverflowError, FloatingPointError):
+                break
+        
+        # Trim x_values to match y_values length
+        x_values = x_values[:len(y_values)]
         
         return x_values, y_values
     
     @staticmethod
     def milne_method(f, x0, y0, xn, h, epsilon=1e-6):
-        """
-        Метод Милна (предиктор-корректор)
-        
-        Прогноз: y_i(прогн) = y_{i-4} + (4h/3) * (2*f_{i-1} - f_{i-2} + 2*f_{i-3})
-        Коррекция: y_i(корр) = y_{i-2} + (h/3) * (f_i(прогн) + 4*f_{i-1} + f_{i-2})
-        
-        Порядок точности: O(h^4)
-        
-        Args:
-            f: функция правой части ОДУ y' = f(x, y)
-            x0: начальное значение x
-            y0: начальное значение y
-            xn: конечное значение x
-            h: шаг интегрирования
-            epsilon: точность итерационной коррекции
-            
-        Returns:
-            tuple: (список x, список y)
-        """
-        # Получаем первые 4 точки методом Рунге-Кутта
         x_rk, y_rk = ODESolver.runge_kutta_4(f, x0, y0, x0 + 3*h, h)
+        
+        if len(x_rk) < 4:
+            return x_rk, y_rk
         
         x_values = x_rk[:4]
         y_values = y_rk[:4]
@@ -108,68 +87,74 @@ class ODESolver:
         for i in range(3, n):
             x_i = x0 + (i + 1) * h
             
-            # Прогноз
-            f_i_1 = f(x_values[i-1], y_values[i-1])
-            f_i_2 = f(x_values[i-2], y_values[i-2])
-            f_i_3 = f(x_values[i-3], y_values[i-3])
-            
-            y_pred = y_values[i-3] + (4*h/3) * (2*f_i_1 - f_i_2 + 2*f_i_3)
-            
-            # Коррекция
-            f_pred = f(x_i, y_pred)
-            y_corr = y_values[i-1] + (h/3) * (f_pred + 4*f_i_1 + f_i_2)
-            
-            # Итерационная коррекция
-            max_iter = 10
-            for _ in range(max_iter):
-                f_corr = f(x_i, y_corr)
-                y_new = y_values[i-1] + (h/3) * (f_corr + 4*f_i_1 + f_i_2)
+            try:
+                f_i_1 = f(x_values[i-1], y_values[i-1])
+                f_i_2 = f(x_values[i-2], y_values[i-2])
+                f_i_3 = f(x_values[i-3], y_values[i-3])
                 
-                if abs(y_new - y_corr) < epsilon:
+                if not (ODESolver._is_overflow_safe(f_i_1) and 
+                        ODESolver._is_overflow_safe(f_i_2) and 
+                        ODESolver._is_overflow_safe(f_i_3)):
                     break
-                y_corr = y_new
-            
-            x_values.append(x_i)
-            y_values.append(y_corr)
+                
+                y_pred = y_values[i-3] + (4*h/3) * (2*f_i_1 - f_i_2 + 2*f_i_3)
+                if not ODESolver._is_overflow_safe(y_pred):
+                    break
+                
+                f_pred = f(x_i, y_pred)
+                if not ODESolver._is_overflow_safe(f_pred):
+                    break
+                
+                y_corr = y_values[i-1] + (h/3) * (f_pred + 4*f_i_1 + f_i_2)
+                if not ODESolver._is_overflow_safe(y_corr):
+                    break
+                
+                max_iter = 10
+                for _ in range(max_iter):
+                    f_corr = f(x_i, y_corr)
+                    if not ODESolver._is_overflow_safe(f_corr):
+                        break
+                    y_new = y_values[i-1] + (h/3) * (f_corr + 4*f_i_1 + f_i_2)
+                    if not ODESolver._is_overflow_safe(y_new):
+                        break
+                    
+                    if abs(y_new - y_corr) < epsilon:
+                        y_corr = y_new
+                        break
+                    y_corr = y_new
+                else:
+                    pass
+                
+                x_values.append(x_i)
+                y_values.append(y_corr)
+            except (OverflowError, FloatingPointError):
+                break
         
         return x_values, y_values
     
     @staticmethod
     def runge_rule(f, x0, y0, xn, h, method, p):
-        """
-        Правило Рунге для оценки погрешности
-        
-        Формула: R = |y_h - y_{h/2}| / (2^p - 1)
-        
-        Args:
-            f: функция правой части ОДУ
-            x0: начальное значение x
-            y0: начальное значение y
-            xn: конечное значение x
-            h: шаг интегрирования
-            method: метод решения ("euler" или "rk4")
-            p: порядок точности метода
-            
-        Returns:
-            float: оценка погрешности
-        """
-        # Решение с шагом h
         if method == "euler":
             _, y_h = ODESolver.euler_method(f, x0, y0, xn, h)
         elif method == "rk4":
             _, y_h = ODESolver.runge_kutta_4(f, x0, y0, xn, h)
         
-        # Решение с шагом h/2
         if method == "euler":
             _, y_h2 = ODESolver.euler_method(f, x0, y0, xn, h/2)
         elif method == "rk4":
             _, y_h2 = ODESolver.runge_kutta_4(f, x0, y0, xn, h/2)
         
-        # Берем значение в конечной точке
+        if len(y_h) == 0 or len(y_h2) == 0:
+            return float('inf')
+        
         y_end_h = y_h[-1]
         y_end_h2 = y_h2[-1]
         
-        # Правило Рунге
-        R = abs(y_end_h - y_end_h2) / (2**p - 1)
+        try:
+            R = abs(y_end_h - y_end_h2) / (2**p - 1)
+            if not ODESolver._is_overflow_safe(R):
+                return float('inf')
+        except (OverflowError, FloatingPointError, ZeroDivisionError):
+            return float('inf')
         
         return R

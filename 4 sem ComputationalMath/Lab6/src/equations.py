@@ -1,15 +1,8 @@
-"""
-Модуль с определениями дифференциальных уравнений
-"""
 import numpy as np
 
-
-class DifferentialEquations:
-    """Класс для хранения дифференциальных уравнений и их точных решений"""
-    
+class DifferentialEquations:    
     @staticmethod
     def get_equations():
-        """Возвращает словарь доступных уравнений"""
         return {
             "y' = x + y": {
                 "func": lambda x, y: x + y,
@@ -21,6 +14,6 @@ class DifferentialEquations:
             },
             "y' = x^2 + y^2": {
                 "func": lambda x, y: x**2 + y**2,
-                "exact": None  # Нет аналитического решения
+                "exact": None
             }
         }
