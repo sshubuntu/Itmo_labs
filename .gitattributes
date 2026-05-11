@@ -1,1 +1,0 @@
-Programming[[:space:]](1-2[[:space:]]sem)/lab7/logs/*.log filter=lfs diff=lfs merge=lfs -text
