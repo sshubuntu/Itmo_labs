@@ -1,0 +1,212 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\geometry{margin=2cm}
+
+\title{Расчетное задание №1}
+\author{Шубин Егор Вячеславович P3209}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{1. Электростатика: метод суперпозиции}
+
+\subsection*{Задание 1}
+Пусть ось цилиндра совпадает с осью $z$, основание лежит в плоскости $z=0$, а поле ищется в центре основания.
+Линейная плотность заряда вдоль оси = $\lambda$, тогда заряд тонкого кольца толщины $dz$:
+\[
+dq=\lambda\,dz.
+\]
+Вклад кольца в осевую компоненту поля:
+\[
+dE_z=\frac{1}{4\pi\varepsilon_0}\frac{dq\,z}{(R^2+z^2)^{3/2}}
+=\frac{\lambda}{4\pi\varepsilon_0}\frac{z\,dz}{(R^2+z^2)^{3/2}}.
+\]
+\[
+E=\frac{\lambda}{4\pi\varepsilon_0}\int_0^\infty \frac{z\,dz}{(R^2+z^2)^{3/2}}
+=\frac{\lambda}{4\pi\varepsilon_0R}.
+\]
+\subsection*{Задание 2}
+$r=R$: $\sigma=kR\cos\theta$.
+
+\textbf{а) Потенциал и напряженность в центре.}
+\[
+\varphi(0)=\frac{1}{4\pi\varepsilon_0R}\oint \sigma\,dS.
+\]
+Так как $\sigma\propto \cos\theta$, интеграл по сфере равен нулю:
+\[
+\varphi(0)=0
+\]
+Поле в центре:
+\[
+\mathbf E(0)= -\frac{1}{4\pi\varepsilon_0R^3}\oint \sigma\,\mathbf r'\,dS
+=-\frac{kR}{3\varepsilon_0}\,\mathbf e_z.
+\]
+Следовательно,
+\[
+\mathbf E(0)=-\frac{kR}{3\varepsilon_0}\mathbf e_z.
+\]
+
+\textbf{б) Производные.}
+Т.к. $\nabla\varphi=-\mathbf E$:
+\[
+\frac{\partial\varphi}{\partial x}=0,\qquad
+\frac{\partial\varphi}{\partial y}=0,\qquad
+\frac{\partial\varphi}{\partial z}=\frac{kR}{3\varepsilon_0}.
+\]
+
+\section*{2. Электростатика: теорема Гаусса}
+
+\subsection*{Задание 3}
+По закону Гаусса:
+\[
+E(r)\,4\pi r^2=\frac{Q_{\text{внутр}}(r)}{\varepsilon_0}.
+\]
+Для $r\le R$:
+\[
+Q(r)=4\pi\int_0^r \rho_0\!\left(1-\frac{r'}{R}\right)r'^2\,dr'
+=4\pi\rho_0\!\left(\frac{r^3}{3}-\frac{r^4}{4R}\right),
+\]
+\[
+E_{\text{внутр}}(r)=\frac{\rho_0}{\varepsilon_0}\left(\frac r3-\frac{r^2}{4R}\right).
+\]
+Полный заряд шара:
+\[
+Q_\Sigma=Q(R)=\frac{\pi\rho_0R^3}{3},
+\]
+для $r\ge R$:
+\[
+E_{\text{внеш}}(r)=\frac{\rho_0R^3}{12\varepsilon_0r^2}.
+\]
+
+\[
+\frac{dE_{\text{in}}}{dr}=\frac{\rho_0}{\varepsilon_0}\left(\frac13-\frac{r}{2R}\right)=0
+\Rightarrow r_m=\frac{2R}{3},
+\]
+\[
+E_{\max}=E(r_m)=\frac{\rho_0R}{9\varepsilon_0}.
+\]
+
+\subsection*{Задание 4}
+Для $r>R$:
+\[
+Q_{\text{внутр}}(r)=Q_0+4\pi\int_R^r \frac{\alpha}{r'}r'^2dr'
+=Q_0+2\pi\alpha(r^2-R^2).
+\]
+\[
+E(r)=\frac{Q_{\text{внутр}}(r)}{4\pi\varepsilon_0r^2}
+=\frac{\alpha}{2\varepsilon_0}
+\frac{1}{\varepsilon_0r^2}\left(\frac{Q_0}{4\pi}-\frac{\alpha R^2}{2}\right).
+\]
+Чтобы $E$ не зависело от $r$, коэффициент при $1/r^2$ должен быть нулем:
+\[
+Q_0=2\pi\alpha R^2.
+\]
+\[
+E=\frac{\alpha}{2\varepsilon_0}.
+\]
+\newpage
+\section*{3. Энергия электрического поля}
+
+\subsection*{Задание 5}
+Пусть $\varepsilon(x)=\varepsilon_1+\dfrac{\varepsilon_2-\varepsilon_1}{d}x$, $x\in[0,d]$.
+ $D=q/S$, а
+\[
+E(x)=\frac{D}{\varepsilon_0\varepsilon(x)}.
+\]
+\[
+U=\int_0^d E(x)\,dx=\frac{q}{S\varepsilon_0}\int_0^d\frac{dx}{\varepsilon(x)}
+=\frac{q}{S\varepsilon_0}\frac{d}{\varepsilon_2-\varepsilon_1}\ln\frac{\varepsilon_2}{\varepsilon_1}.
+\]
+Отсюда емкость:
+\[
+C=\frac{q}{U}=
+\frac{S\varepsilon_0(\varepsilon_2-\varepsilon_1)}
+{d\ln(\varepsilon_2/\varepsilon_1)}.
+\]
+
+Поляризация:
+\[
+P=D\!\left(1-\frac1\varepsilon\right),
+\qquad
+\rho_{\text{св}}=-\nabla\!\cdot\!\mathbf P=-\frac{dP}{dx}
+=-D\frac{1}{\varepsilon^2}\frac{d\varepsilon}{dx}.
+\]
+Так как $D=q/S$ и $\dfrac{d\varepsilon}{dx}=\dfrac{\varepsilon_2-\varepsilon_1}{d}$:
+\[
+\rho_{\text{св}}(\varepsilon)=
+-\frac{q}{S}\frac{\varepsilon_2-\varepsilon_1}{d\,\varepsilon^2}.
+\]
+
+\subsection*{Задание 6}
+Для тонкой сферической оболочки радиуса $r$:
+\[
+W=\frac{q^2}{8\pi\varepsilon_0\varepsilon r}.
+\]
+При $\varepsilon=1$:
+\[
+W=\frac{q^2}{8\pi\varepsilon_0 r}.
+\]
+\[
+W_{r\to R}=W\!\left(1-\frac{r}{R}\right),
+\]
+поэтому доля энергии внутри сферы радиуса $R$:
+\[
+\eta=1-\frac{r}{R}.
+\]
+Для $r=1\ \text{см}$, $R=1\ \text{м}$:
+\[
+\eta=1-0.01=0.99.
+\]
+При $q=1\cdot10^{-19}\ \text{Кл}$ и $r=1\ \text{см}$:
+\[
+W\approx 4.5\cdot10^{-27}\ \text{Дж}.
+\]
+
+\section*{4. Постоянный ток}
+
+\subsection*{Задание 7}
+\[
+G=\frac{1}{\rho}\frac{S}{d}.
+\]
+Из формулы емкости $C=\varepsilon_0\varepsilon\,S/d$:
+\[
+\frac{S}{d}=\frac{C}{\varepsilon_0\varepsilon},
+\qquad
+I=UG=\frac{UC}{\rho\varepsilon_0\varepsilon}.
+\]
+\[
+U=2000\ \text{В},\ 
+C=3000\ \text{пФ}=3.0\cdot10^{-9}\ \text{Ф},\ 
+\rho=100\ \text{ГОм}\cdot\text{м}=10^{11}\ \Omega\cdot\text{м},\ 
+\varepsilon=7.
+\]
+\[
+I\approx 9.7\cdot10^{-7}\ \text{А}\approx 0.97\ \mu\text{А}.
+\]
+
+\subsection*{Задание 8}
+Дано: $l=1000\ \text{м}$, $S=1\ \text{мм}^2=10^{-6}\ \text{м}^2$, $I=4.5\ \text{А}$.
+\[
+n=\frac{\rho_mN_A}{M}\approx
+\frac{8.9\cdot10^3\cdot 6.02\cdot10^{23}}{63.5\cdot10^{-3}}
+\approx 8.4\cdot10^{28}\ \text{м}^{-3}.
+\]
+\[
+v=\frac{I}{neS}\approx 3.3\cdot10^{-4}\ \text{м/с}.
+\]
+\[
+t=\frac{l}{v}\approx 3\cdot10^6\ \text{с}
+\]
+\[
+N=nSl,\qquad E=\rho_{\text{Cu}}\frac{I}{S},\qquad F_\Sigma=NeE.
+\]
+\[
+F_\Sigma=n\,e\,\rho_{\text{Cu}}\,I\,l\approx 1.0\cdot10^6\ \text{Н}.
+\]
+
+\end{document}
