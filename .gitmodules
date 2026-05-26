@@ -28,3 +28,6 @@
 [submodule "4 sem OPI/OPI_lab4"]
 	path = 4 sem OPI/OPI_lab4
 	url = https://github.com/sshubuntu/OPI_lab4
+[submodule "4 sem AK/OPI_Lab3.5"]
+	path = 4 sem AK/OPI_Lab3.5
+	url = https://github.com/sshubuntu/OPI_Lab3.5.git
