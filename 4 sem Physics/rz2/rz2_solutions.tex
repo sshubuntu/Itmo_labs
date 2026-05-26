@@ -1,0 +1,210 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.65em}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{0.25\textheight}
+    {\LARGE Расчетное задание 2.\par}
+    \vspace{1.5cm}
+    {\Large Шубин Егор Вячеславович\par}
+    {\Large P3209\par}
+    \vfill
+    {\large 2026\par}
+\end{titlepage}
+
+\section*{Задача 1}
+
+Для дуги окружности радиуса \(r\), видимой из точки \(O\) под углом
+\(\theta\), поле в центре равно
+\[
+    B_{\text{дуги}}=\frac{\mu_0 I}{4\pi r}\theta .
+\]
+
+а) Для данного рисунка дуга окружности радиуса \(a\) видна под углом \(2\pi-\varphi\), а дуга радиуса \(b\) видна под углом \(\varphi\). Поэтому
+\[
+    B=\frac{\mu_0 I}{4\pi}
+    \left(\frac{2\pi-\varphi}{a}+\frac{\varphi}{b}\right).
+\]
+
+б) Круговая часть контура имеет угол \(3\pi/2\), а прямая часть контура видна под углом \(45^\circ\). Поэтому
+\[
+    B_{\text{окр}}=\frac{\mu_0 I}{4\pi}\frac{3\pi}{2a},
+    \qquad
+    B_{\text{пр}}=
+    2\cdot\frac{\mu_0 I}{4\pi b}\sin45^\circ
+    =\frac{\mu_0 I}{4\pi}\frac{\sqrt2}{b}.
+\]
+Следовательно,
+\[
+    B=\frac{\mu_0 I}{4\pi}
+    \left(\frac{3\pi}{2a}+\frac{\sqrt2}{b}\right)
+\]
+Поле направлено внутрь листа.
+
+\section*{Задача 2}
+
+Выделим на сфере кольцо между углами \(\theta\) и \(\theta+d\theta\):
+\[
+    dq=\sigma\cdot 2\pi R^2\sin\theta\,d\theta,
+    \qquad
+    dI=\frac{\omega\,dq}{2\pi}
+    =\sigma\omega R^2\sin\theta\,d\theta .
+\]
+Поле этого кольца в центре сферы:
+\[
+    dB=\frac{\mu_0 dI(R\sin\theta)^2}{2R^3}
+    =\frac{\mu_0\sigma\omega R}{2}\sin^3\theta\,d\theta .
+\]
+Тогда
+\[
+    B=\frac{\mu_0\sigma\omega R}{2}\int_0^\pi\sin^3\theta\,d\theta
+    =\frac{2}{3}\mu_0\sigma\omega R.
+\]
+\[
+    B=\frac{2}{3}\cdot 4\pi\cdot10^{-7}\cdot10^{-5}\cdot70\cdot0.05
+    \approx 2.93\cdot10^{-11}\ \text{Тл}.
+\]
+\[
+  B\approx 2.93\cdot10^{-11}\ \text{Тл}
+\]
+
+\section*{Задача 3}
+
+Для одного витка сила вдоль оси равна \(dF=I\,d\Phi\). На участке длины
+\(dz\) находится \(n\,dz\) витков, поэтому
+\[
+    F_z=nI\int d\Phi=nI(\Phi_2-\Phi_1).
+\]
+\[
+    F=nI|\Phi_2-\Phi_1|
+\]
+
+\section*{Задача 4}
+
+Поверхностная плотность тока:
+\[
+    K=\frac{I}{2\pi R}.
+\]
+Внутри цилиндра \(B_{\text{вн}}=0\), снаружи у поверхности
+\[
+    B_{\text{нар}}=\frac{\mu_0 I}{2\pi R}=\mu_0 K.
+\]
+\[
+    p=\frac{B_{\text{нар}}^2-B_{\text{вн}}^2}{2\mu_0}
+    =\frac{\mu_0 I^2}{8\pi^2R^2}.
+\]
+\[
+    p=\frac{4\pi\cdot10^{-7}\cdot 50^2}
+    {8\pi^2\cdot(0.05)^2}
+    \approx 1.59\cdot10^{-2}\ \text{Па}.
+\]
+
+
+\section*{Задача 5}
+
+\[
+    B(t)=\dot B\,t,\qquad
+    x(t)=\frac{at^2}{2},\qquad
+    S(t)=lx(t)=\frac{lat^2}{2}.
+\]
+Поток:
+\[
+    \Phi(t)=B(t)S(t)=\frac{\dot B\,l a t^3}{2}.
+\]
+ЭДС индукции:
+\[
+    \mathcal{E}=\left|\frac{d\Phi}{dt}\right|
+    =\frac{3}{2}\dot B\,l a t^2.
+\]
+\[
+    \mathcal{E}=
+    \frac{3}{2}\cdot0.1\cdot0.20\cdot0.10\cdot2^2
+    =1.2\cdot10^{-2}\ \text{В}.
+\]
+
+\section*{Задача 6}
+
+Потокосцепление тора:
+\[
+    \Psi=N\Phi.
+\]
+Индуктивность:
+\[
+    L=\frac{\Psi}{I}=\frac{N\Phi}{I}.
+\]
+Энергия магнитного поля:
+\[
+    W=\frac{LI^2}{2}=\frac{N\Phi I}{2}.
+\]
+\[
+    W=\frac{500\cdot10^{-3}\cdot2}{2}=0.50\ \text{Дж}.
+\]
+
+\section*{Задача 7}
+
+Скорость протона после ускорения:
+\[
+    eU=\frac{m_pv^2}{2}.
+\]
+Радиус траектории в магнитном поле:
+\[
+    r=\frac{m_pv}{eB}
+    =\frac{1}{B}\sqrt{\frac{2m_pU}{e}}.
+\]
+\[
+    r=\frac{1}{0.51}\sqrt{\frac{2\cdot1.67\cdot10^{-27}\cdot5\cdot10^5}
+    {1.60\cdot10^{-19}}}
+    \approx 0.2\ \text{м}.
+\]
+Так как толщина области поля \(d\) отсчитывается вдоль первоначального
+направления движения,
+\[
+    \sin\alpha=\frac{d}{r}=\frac{0.1}{0.2}\approx 0.5.
+\]
+Следовательно,
+\[
+    \alpha= 30.0^\circ
+\]
+
+\section*{Задача 8}
+
+Амплитуда тока в контуре убывает по закону
+\[
+    I_m(t)=I_{m0}e^{-\beta t},
+    \qquad
+    \beta=\frac{R}{2L}.
+\]
+\[
+    t_e=\frac{1}{\beta}=\frac{2L}{R}.
+\]
+\[
+    T=\frac{2\pi}{\omega},
+    \qquad
+    \omega=\sqrt{\frac{1}{LC}-\frac{R^2}{4L^2}}.
+\]
+\[
+    N=\frac{t_e}{T}=\frac{L\omega}{\pi R}.
+\]
+При \(C=10\,\text{мкФ}\), \(L=25\,\text{мГн}\), \(R=1\,\text{Ом}\):
+\[
+    \omega=\sqrt{\frac{1}{25\cdot10^{-3}\cdot10\cdot10^{-6}}
+    -\frac{1}{4(25\cdot10^{-3})^2}}
+    \approx 2.00\cdot10^3\ \text{с}^{-1},
+\]
+\[
+    N=\frac{25\cdot10^{-3}\cdot2.00\cdot10^3}{\pi}
+    \approx 15.9\ \text{колебаний}.
+\]
+
+\end{document}
